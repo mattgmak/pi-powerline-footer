@@ -4,7 +4,7 @@ import { visibleWidth } from "@earendil-works/pi-tui";
 import type { BuiltinStatusLineSegmentId, RenderedSegment, RequestCacheUsage, SegmentContext, SemanticColor, StatusLineSegment, StatusLineSegmentId } from "./types.ts";
 import { normalizeCompactExtensionStatus, normalizeExtensionStatusValue } from "./powerline-config.ts";
 import { fg, applyColor } from "./theme.ts";
-import { getIcons, SEP_DOT, getThinkingText } from "./icons.ts";
+import { getIcons, SEP_DOT, getThinkingText, getThinkingSegmentLabel } from "./icons.ts";
 import { formatUsdCost } from "./currency-rates.ts";
 import { getGitRemoteHost } from "./git-status.ts";
 import type { IconSet } from "./icons.ts";
@@ -215,7 +215,7 @@ const thinkingSegment: StatusLineSegment = {
       xhigh: "xhigh",
     };
     const label = levelText[level] || level;
-    const content = `think:${label}`;
+    const content = getThinkingSegmentLabel(label);
 
     if (level === "high") {
       return { content: color(ctx, "thinkingHigh", content), visible: true };

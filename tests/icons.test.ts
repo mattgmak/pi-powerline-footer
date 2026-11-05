@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { hasNerdFonts } from "../icons.ts";
+import { hasNerdFonts, getThinkingSegmentLabel } from "../icons.ts";
 
 test("hasNerdFonts uses TERM only when TERM_PROGRAM is unset and preserves overrides", () => {
   const saved = { ...process.env };
@@ -44,5 +44,19 @@ test("hasNerdFonts uses TERM only when TERM_PROGRAM is unset and preserves overr
       if (key in saved) process.env[key] = saved[key];
       else delete process.env[key];
     }
+  }
+});
+
+test("getThinkingSegmentLabel puts one space after the brain glyph and attaches text prefixes", () => {
+  const saved = process.env.POWERLINE_NERD_FONTS;
+  try {
+    process.env.POWERLINE_NERD_FONTS = "1";
+    assert.equal(getThinkingSegmentLabel("high"), "\u{F09D1} high");
+
+    process.env.POWERLINE_NERD_FONTS = "0";
+    assert.equal(getThinkingSegmentLabel("high"), "think:high");
+  } finally {
+    if (saved === undefined) delete process.env.POWERLINE_NERD_FONTS;
+    else process.env.POWERLINE_NERD_FONTS = saved;
   }
 });
